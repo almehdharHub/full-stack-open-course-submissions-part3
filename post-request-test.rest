@@ -3,5 +3,4 @@ Content-Type: application/json
 
 {
     "name": "new person",
-    "number": "12345"
 }

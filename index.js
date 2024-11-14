@@ -54,14 +54,27 @@ const generateId = () => {
 };
 
 app.post("/api/persons", (request, response) => {
+  const { name, number } = request.body;
+
+  if (!name || !number) {
+    return response.status(400).json({ error: "name and number are required" });
+  }
+
+  if (
+    persons.some((person) => person.name.toLowerCase() === name.toLowerCase())
+  ) {
+    return response.status(400).json({ error: "name must be unique" });
+  }
+
   const newPerson = {
-    name: request.body.name,
-    number: request.body.number,
+    name,
+    number,
     id: generateId(),
   };
+
   persons = persons.concat(newPerson);
-  console.log("post request");
-  response.json(newPerson);
+
+  response.status(201).json(newPerson);
 });
 app.delete("/api/persons/:id", (request, response) => {
   const id = request.params.id;
